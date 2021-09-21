@@ -54,10 +54,10 @@ const color = new THREE.Color();
 
 // position the cube, and add it to the scene:
 const timep = Date.now() * 0.005;
-const radius = 2.5;
+const radius = 4;
 for ( let i = 0; i < cubes; i ++ ) {
 
-positions.push( ( Math.random() *2-1) * radius );
+positions.push(( Math.random() *2-1) * radius );
 positions.push( ( Math.random()* 2-1) * radius );
 positions.push( ( Math.random() * 2- 1) * radius);
 //positions.push( ( Math.random() * 20- 10) * radius);
@@ -107,9 +107,9 @@ function animate() {
 				}
 
 				geometry.attributes.size.needsUpdate = true;
-        		cube.rotation.z = 0.1 *time/2;
-cube.rotation.x +=  0.01 * (1 + Math.sin( 0.5 * time));
- cube.rotation.y += 0.1 * (1+ Math.sin( 0.5 * time));
+        		cube.rotation.z = 0.1 * (1 + Math.cos( 0.5 * time));
+cube.rotation.x +=  0.8 * (1 + Math.sin( 0.5 * time));
+ cube.rotation.y += 0.5 * (1+ Math.cos( 0.5 * time));
 
  
 
