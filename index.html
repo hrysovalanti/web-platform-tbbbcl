@@ -10,11 +10,23 @@
   <body>
   <script type="module">
   import * as THREE from "https://unpkg.com/three@0.126.0/build/three.module.js";
+  import Stats from "https://unpkg.com/three@0.126.0/examples/jsm/libs/stats.module";
+  // load in the VRButton module for the "Enter VR" button
+import { VRButton } from 'https://cdn.skypack.dev/three@0.128.0/examples/jsm/webxr/VRButton.js'
+  
+// add a stats view to the page to monitor performance:
+const stats = new Stats();
+document.body.appendChild(stats.dom);
+//lights
+let light1, light2, light3, light4;
   // create a renderer with better than default quality:
 const renderer = new THREE.WebGLRenderer({ antialias: true });
+const cubes = 100;
 renderer.setPixelRatio(window.devicePixelRatio);
 // make it fill the page
 renderer.setSize(window.innerWidth, window.innerHeight);
+// enable XR option in the renderer
+renderer.xr.enabled = true;
 // create and add the <canvas>
 document.body.appendChild(renderer.domElement);
 // create a perspective camera
@@ -28,34 +40,113 @@ const camera = new THREE.PerspectiveCamera(
 // the Y axis points up from the ground
 // the Z axis point out of the screen toward you
 camera.position.y = 1.5;
-camera.position.z = 2;
+camera.position.z = 12;
 
 // create the root of a scene graph
 const scene = new THREE.Scene();
-const geometry = new THREE.BoxGeometry();
+const geometry = new THREE.SphereGeometry();
 const material = new THREE.MeshStandardMaterial();
-const cube = new THREE.Mesh( geometry, material );
+
+const positions=[];
+const sizes = [];
+const colors = [];
+const color = new THREE.Color();
+
 // position the cube, and add it to the scene:
-cube.position.y = 1.5;
-scene.add( cube );
-const light = new THREE.HemisphereLight(0xfff0f0, 0x606066);
-scene.add(light);
+const timep = Date.now() * 0.005;
+const radius = 3.5;
+for ( let i = 0; i < cubes; i ++ ) {
+
+positions.push( ( Math.random() *2-1) * radius );
+positions.push( ( Math.random()*2-1) * radius );
+positions.push( ( Math.random() * 2 - 1) * radius);
+
+color.setHSL( i / cubes, 1.0, 0.5 );
+
+colors.push( color.r, color.g, color.b );
+
+sizes.push( 2 );
+
+}
+geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( positions, 3 ) );
+				geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
+				geometry.setAttribute( 'size', new THREE.Float32BufferAttribute( sizes, 1 ).setUsage( THREE.DynamicDrawUsage ) );
+const cube = new THREE.Mesh( geometry, material );
+//const sphere = new THREE.SphereGeometry( 0.5, 16, 8 );
+//positions.push( ( Math.random() * 2 - 1 ) * radius );
+//cube.position.y = 1.5 + Math.sin( 0.1 * timep);
+scene.add( cube);
+
+light1 = new THREE.PointLight( 0xff0040, 2, 50 );
+				////light1.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0xff0040 } ) ) );
+				scene.add( light1 );
+        light2 = new THREE.PointLight( 0x0040ff, 2, 50 );
+				scene.add( light2 );
+
+				light3 = new THREE.PointLight( 0x80ff80, 2, 50 );
+			
+				scene.add( light3 );
+
+				light4 = new THREE.PointLight( 0xffaa00, 2, 50 );
+				scene.add( light4 );
+// const light = new THREE.PointLight(0xfff0f0, 0x606066);
+// scene.add(light);
 function animate() {
   // update the scene:
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
+  const time = Date.now() * 0.005;
 
+		
+
+				const sizes = geometry.attributes.size.array;
+
+				for ( let i = 0; i < cubes; i ++ ) {
+
+					sizes[ i ] = 10 * (1 + Math.sin( 0.5 * i + time ) );
+
+				}
+
+				geometry.attributes.size.needsUpdate = true;
+        		cube.rotation.z = 0.1 *time/2;
+cube.rotation.x +=  0.01 * (1 + Math.sin( 0.5 * time));
+ cube.rotation.y += 0.1 * (1+ Math.sin( 0.5 * time));
+
+ 
+
+				//lights
+
+
+        light1.position.x = Math.sin( time * 0.7 ) * 30;
+				light1.position.y = Math.cos( time * 0.5 ) * 40;
+				light1.position.z = Math.cos( time * 0.3 ) * 30;
+
+        light2.position.x = Math.cos( time * 0.3 ) * 30;
+				light2.position.y = Math.sin( time * 0.5 ) * 40;
+				light2.position.z = Math.sin( time * 0.7 ) * 30;
+
+				light3.position.x = Math.sin( time * 0.7 ) * 30;
+				light3.position.y = Math.cos( time * 0.3 ) * 40;
+				light3.position.z = Math.sin( time * 0.5 ) * 30;
+
+				light4.position.x = Math.sin( time * 0.3 ) * 30;
+				light4.position.y = Math.cos( time * 0.7 ) * 40;
+				light4.position.z = Math.sin( time * 0.5 ) * 30;
+				
   // draw the scene:
   renderer.render( scene, camera );
+  stats.begin();
+  stats.end();
 };
 // start!
 renderer.setAnimationLoop(animate);
 window.addEventListener("resize", function () {
   // ensure the renderer fills the page, and the camera aspect ratio matches:
+
   renderer.setSize(window.innerWidth, window.innerHeight);
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
+
 }, false);
+
   </script>  
   </body>
 </html>
