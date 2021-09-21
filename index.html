@@ -50,18 +50,6 @@ const points = [];
 points.push( new THREE.Vector3( - 10, 0, 0 ) );
 points.push( new THREE.Vector3( 0, 10, 0 ) );
 points.push( new THREE.Vector3( 10, 0, 0 ) );
-
-
-const positions=[];
-const sizes = [];
-const colors = [];
-const color = new THREE.Color();
-const material = new THREE.LineBasicMaterial({color:0xffaa00});
-const geometry = new THREE.BufferGeometry().setFromPoints( points );
-// position the cube, and add it to the scene:
-const timep = Date.now() * 0.005;
-const radius = 2;
-
 light1 = new THREE.PointLight( 0xff0040, 2, 50 );
 				////light1.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0xff0040 } ) ) );
 				scene.add( light1 );
@@ -74,6 +62,20 @@ light1 = new THREE.PointLight( 0xff0040, 2, 50 );
 
 				light4 = new THREE.PointLight( 0xffaa00, 2, 50 );
 				scene.add( light4 );
+
+const positions=[];
+const sizes = [];
+const colors = [];
+const color = new THREE.Color();
+const material = new THREE.LineBasicMaterial({color:0xffaa00});
+const geometry2 = new THREE.SphereGeometry();
+const material2 = new THREE.MeshBasicMaterial( { color: 0xff0040 });
+const geometry = new THREE.BufferGeometry().setFromPoints( points );
+// position the cube, and add it to the scene:
+const timep = Date.now() * 0.005;
+const radius = 2;
+
+
 for ( let i = 0; i < cubes; i ++ ) {
 
 positions.push(( Math.random() *2-1) * radius );
@@ -92,10 +94,11 @@ geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( positions, 
 				geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
 				geometry.setAttribute( 'size', new THREE.Float32BufferAttribute( sizes, 1 ).setUsage( THREE.DynamicDrawUsage ) );
 const cube = new THREE.Line( geometry, material);
+const sphere = new THREE.Mesh(geometry2, material2);
 //const sphere = new THREE.SphereGeometry( 0.5, 16, 8 );
 //positions.push( ( Math.random() * 2 - 1 ) * radius );
 //cube.position.y = 1.5 + Math.sin( 0.1 * timep);
-scene.add( cube);
+scene.add( cube, sphere);
 
 // const light = new THREE.PointLight(0xfff0f0, 0x606066);
 // scene.add(light);
@@ -117,6 +120,9 @@ function animate() {
         		cube.rotation.z = 0.5 * (1 + Math.cos( 0.5 * time));
 cube.rotation.x +=  0.05 * (1 + Math.sin( 0.5 * time));
  cube.rotation.y += 0.05 * (1+ Math.cos( 0.5 * time));
+ sphere.rotation.z = 0.5 * (1 + Math.cos( 0.5 * time));
+sphere.rotation.x +=  0.05 * (1 + Math.sin( 0.5 * time));
+sphere.rotation.y += 0.05 * (1+ Math.cos( 0.5 * time));
 
  
 
