@@ -21,7 +21,7 @@ document.body.appendChild(stats.dom);
 let light1, light2, light3, light4;
   // create a renderer with better than default quality:
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-const cubes = 30000;
+const cubes = 10000;
 renderer.setPixelRatio(window.devicePixelRatio);
 // make it fill the page
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -50,10 +50,12 @@ const points = [];
 points.push( new THREE.Vector3( - 10, 0, 0 ) );
 points.push( new THREE.Vector3( 0, 10, 0 ) );
 points.push( new THREE.Vector3( 10, 0, 0 ) );
-light1 = new THREE.PointLight( 0xffaa00, 2, 45 );
+const light = new THREE.HemisphereLight( 0xffffff, 0xdff0000, 0.22 );
+scene.add( light );
+light1 = new THREE.PointLight( 0xdff0000, 2, 45 );
 				////light1.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0xff0040 } ) ) );
 				scene.add( light1 );
-        light2 = new THREE.PointLight( 0xa9a9a9, 2, 35 );
+        light2 = new THREE.PointLight( 0x000000, 2, 35 );
 				scene.add( light2 );
 
 				light3 = new THREE.PointLight( 0xd3d3d3, 2, 50 );
@@ -67,13 +69,13 @@ const positions=[];
 const sizes = [];
 const colors = [];
 const color = new THREE.Color();
-const material = new THREE.MeshStandardMaterial();
+const material = new THREE.LineBasicMaterial();
 const geometry = new THREE.BufferGeometry().setFromPoints( points );
 const geometry2 = new THREE.SphereGeometry();
 const material2 = new THREE.MeshStandardMaterial();
 // position the cube, and add it to the scene:
 const timep = Date.now() * 0.0005;
-const radius = 4;
+const radius = 0.63;
 
 
 for ( let i = 0; i < cubes; i ++ ) {
