@@ -50,10 +50,10 @@ const points = [];
 points.push( new THREE.Vector3( - 10, 0, 0 ) );
 points.push( new THREE.Vector3( 0, 10, 0 ) );
 points.push( new THREE.Vector3( 10, 0, 0 ) );
-light1 = new THREE.PointLight( 0xffaa00, 2, 50 );
+light1 = new THREE.PointLight( 0xffaa00, 2, 45 );
 				////light1.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0xff0040 } ) ) );
 				scene.add( light1 );
-        light2 = new THREE.PointLight( 0xa9a9a9, 2, 50 );
+        light2 = new THREE.PointLight( 0xa9a9a9, 2, 35 );
 				scene.add( light2 );
 
 				light3 = new THREE.PointLight( 0xd3d3d3, 2, 50 );
@@ -117,10 +117,10 @@ function animate() {
 				}
 
 				geometry.attributes.size.needsUpdate = true;
-        		cube.rotation.z = 0.5 * (1 + Math.cos( 0.5 * time));
+        	//	cube.rotation.z = 0.5 * (1 + Math.cos( 0.5 * time));
 cube.rotation.x +=  0.5 * (1 + Math.sin( 0.5 * time));
  cube.rotation.y += 0.5 * (1+ Math.cos( 0.5 * time));
- sphere.rotation.z = 0.5 * (1 + Math.cos( 0.5 * time));
+ //sphere.rotation.z = 0.5 * (1 + Math.cos( 0.5 * time));
 sphere.rotation.x +=  0.05 * (1 + Math.sin( 0.5 * time));
 sphere.rotation.y += 0.05 * (1+ Math.cos( 0.5 * time));
 
@@ -130,7 +130,7 @@ sphere.rotation.y += 0.05 * (1+ Math.cos( 0.5 * time));
 
 
         light1.position.x = Math.sin( time * 0.07 ) * 10;
-				light1.position.y = Math.cos( time * 0.5 ) * 40;
+				light1.position.y = Math.cos( time * 0.05 ) * 40;
 				light1.position.z = Math.cos( time * 0.3 ) * 30;
 
         light2.position.x = Math.cos( time * 0.3 ) * 10;
