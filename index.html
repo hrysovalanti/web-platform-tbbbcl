@@ -21,7 +21,7 @@ document.body.appendChild(stats.dom);
 let light1, light2, light3, light4;
   // create a renderer with better than default quality:
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-const cubes = 7000;
+const cubes = 30000;
 renderer.setPixelRatio(window.devicePixelRatio);
 // make it fill the page
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -60,8 +60,8 @@ light1 = new THREE.PointLight( 0xffaa00, 2, 45 );
 			
 				scene.add( light3 );
 
-				// light4 = new THREE.PointLight( 0xffaa00, 2, 50 );
-				// scene.add( light4 );
+				light4 = new THREE.PointLight( 0xcc5500, 2, 50 );
+				scene.add( light4 );
 
 const positions=[];
 const sizes = [];
@@ -130,20 +130,20 @@ sphere.rotation.y += 0.05 * (1+ Math.cos( 0.5 * time));
 
 
         light1.position.x = Math.sin( time * 0.07 ) * 10;
-				light1.position.y = Math.cos( time * 0.05 ) * 40;
-				light1.position.z = Math.cos( time * 0.3 ) * 30;
+				light1.position.y = Math.cos( time * 0.5 ) * 20;
+				light1.position.z = Math.cos( time * 0.03 ) * 15;
 
         light2.position.x = Math.cos( time * 0.3 ) * 10;
-				light2.position.y = Math.sin( time * 0.5 ) * 40;
-				light2.position.z = Math.sin( time * 0.07 ) * 30;
+				light2.position.y = Math.sin( time * 0.5 ) * 20;
+				light2.position.z = Math.sin( time * 0.07 ) * 15;
 
-				// light3.position.x = Math.sin( time * 0.7 ) * 30;
-				// light3.position.y = Math.cos( time * 0.3 ) * 40;
-				// light3.position.z = Math.sin( time * 0.5 ) * 30;
+				light3.position.x = Math.sin( time * 0.7 ) * 30;
+				light3.position.y = Math.cos( time * 0.3 ) * 40;
+				light3.position.z = Math.sin( time * 0.5 ) * 30;
 
-				// light4.position.x = Math.sin( time * 0.3 ) * 30;
-				// light4.position.y = Math.cos( time * 0.7 ) * 40;
-				// light4.position.z = Math.sin( time * 0.5 ) * 30;
+				light4.position.x = Math.sin( time * 0.3 ) * 30;
+				light4.position.y = Math.cos( time * 0.7 ) * 40;
+				light4.position.z = Math.sin( time * 0.5 ) * 30;
 				
   // draw the scene:
   renderer.render( scene, camera );
