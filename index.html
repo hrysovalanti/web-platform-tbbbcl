@@ -50,6 +50,12 @@ function animate() {
 };
 // start!
 renderer.setAnimationLoop(animate);
+window.addEventListener("resize", function () {
+  // ensure the renderer fills the page, and the camera aspect ratio matches:
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+}, false);
   </script>  
   </body>
 </html>
