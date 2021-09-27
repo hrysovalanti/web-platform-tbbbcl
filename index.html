@@ -190,8 +190,10 @@
           );
           if (generatorControls.frequency > 50) {
             const time = Date.now() * 0.005;
-            sphere.rotation.x += 0.05 * (1 + Math.sin(0.5 * time));
-            sphere.rotation.y += 0.05 * (1 + Math.sin(0.5 * time));
+            // sphere.rotation.x += 0.05 * (1 + Math.sin(0.5 * time));
+            // sphere.rotation.y += 0.05 * (1 + Math.sin(0.5 * time));
+            cube.rotation.x += 0.05 * (1 + Math.sin(0.5 * time));
+            cube.rotation.y += 0.05 * (1 + Math.sin(0.5 * time));
           }
         });
       generatorFolder
