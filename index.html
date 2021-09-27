@@ -90,7 +90,7 @@ const geometry2 = new THREE.SphereGeometry();
 const material2 = new THREE.MeshPhongMaterial();
 // position the cube, and add it to the scene:
 const timep = Date.now() * 0.0005;
-const radius = 0.93;
+const radius = 0.63;
 
 
 for ( let i = 0; i < cubes; i ++ ) {
@@ -104,7 +104,7 @@ color.setHSL( i / cubes, 0.8, 0.5 );
 
 colors.push( color.r, color.g, color.b );
 
-sizes.push( 0.40 );
+sizes.push( 0.20 );
 
 }
 geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( positions, 3) );
