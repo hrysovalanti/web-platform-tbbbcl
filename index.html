@@ -188,12 +188,17 @@
             generatorControls.frequency,
             listener.context.currentTime
           );
-          if (generatorControls.frequency > 50) {
+          if (generatorControls.frequency > 500) {
             const time = Date.now() * 0.005;
             // sphere.rotation.x += 0.05 * (1 + Math.sin(0.5 * time));
             // sphere.rotation.y += 0.05 * (1 + Math.sin(0.5 * time));
             cube.rotation.x += 0.05 * (1 + Math.sin(0.5 * time));
             cube.rotation.y += 0.05 * (1 + Math.sin(0.5 * time));
+          }
+          else {
+            const time = Date.now() * 0.005;
+            cube.rotation.x -= 0.05 * (1 + Math.sin(0.5 * time));
+            cube.rotation.y -= 0.05 * (1 + Math.sin(0.5 * time))
           }
         });
       generatorFolder
