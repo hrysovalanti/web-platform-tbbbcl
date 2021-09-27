@@ -9,10 +9,9 @@
   </head>
   <body>
 
-  <audio id="proustinterpretation1" preload="auto" style="display: none">
-  <source src="https://soundcloud.com/user-587232548-917601762/proustinterpretation1/s-R7Css2rzAWr" type="audio/ogg">
-  <source src="https://soundcloud.com/user-587232548-917601762/proustinterpretation1/s-R7Css2rzAWr" 
-  type="audio/mpeg">
+  <audio id="song" preload="auto" style="display: none">
+  <source src="sounds/358232_j_s_song.ogg" type="audio/ogg">
+  <source src="sounds/358232_j_s_song.mp3" type="audio/mpeg">
 </audio>
 <button id="startButton">Play
 </button>
@@ -132,10 +131,13 @@ pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;}
 const listener = new THREE.AudioListener();
 				camera.add( listener );
         const sound1 = new THREE.PositionalAudio( listener );
-				const songElement = document.getElementById( 'proustinterpretation1' );
-				sound1.setMediaElementSource( songElement );
+				const oscillator = listener.context.createOscillator();
+				oscillator.type = 'sine';
+				oscillator.frequency.setValueAtTime( 144, sound1.context.currentTime );
+				oscillator.start( 0 );
+				sound1.setNodeSource( oscillator );
 				sound1.setRefDistance( 20 );
-				songElement.play();
+				sound1.setVolume( 0.5 );
 				sphere.add( sound1 );
         let analyser1;
         analyser1 = new THREE.AudioAnalyser( sound1, 32 );
@@ -172,8 +174,8 @@ function animate() {
 
 				geometry.attributes.size.needsUpdate = true;
         	//	cube.rotation.z = 0.5 * (1 + Math.cos( 0.5 * time));
-cube.rotation.x +=  0.5 * (1 + Math.sin( 0.5 * time));
- cube.rotation.y += 0.5 * (1+ Math.cos( 0.5 * time));
+// cube.rotation.x +=  0.5 * (1 + Math.sin( 0.5 * time));
+//  cube.rotation.y += 0.5 * (1+ Math.cos( 0.5 * time));
  //sphere.rotation.z = 0.5 * (1 + Math.cos( 0.5 * time));
 // sphere.rotation.x +=  0.05 * (1 + Math.sin( 0.5 * time));
 // sphere.rotation.y += 0.05 * (1+ Math.cos( 0.5 * time));
