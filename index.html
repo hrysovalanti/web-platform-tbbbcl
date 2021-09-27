@@ -8,32 +8,10 @@
 </style>
   </head>
   <body>
-  <script src="node_modules/songbird-audio/build/songbird.min.js">
-let audioContext = new AudioContext();
- 
- // Create a (1st-order Ambisonic) Songbird scene.
- let songbird = new Songbird(audioContext);
-  
- // Send songbird's binaural output to stereo out.
- songbird.output.connect(audioContext.destination);
- // Set room acoustics properties.
-let dimensions = {
-  width : 3.1,
-  height : 2.5,
-  depth : 3.4
-};
-let materials = {
-  left : 'brick-bare',
-  right : 'curtain-heavy',
-  front : 'marble',
-  back : 'glass-thin',
-  down : 'grass',
-  up : 'transparent'
-};
-songbird.setRoomProperties(dimensions, materials);
 
-// Create an audio element. Feed into audio graph.
-let audioElement = document.createElement('audio');
+  <audio id="proustinterpretation1" preload="auto" style="display: none">
+  <source src="https://github.com/hrysovalanti/web-platform-tbbbcl/blob/master/proustinterpretation1.ogg" type="audio/ogg">
+</audio>
   </script>
 
   <script type="module">
@@ -42,6 +20,7 @@ let audioElement = document.createElement('audio');
   // load in the VRButton module for the "Enter VR" button
 import { VRButton } from 'https://cdn.skypack.dev/three@0.128.0/examples/jsm/webxr/VRButton.js'
 import { OrbitControls } from 'https://unpkg.com/three@0.126.0/examples/jsm/controls/OrbitControls.js';
+import { GUI } from 'https://unpkg.com/three@0.126.0/examples/jsm/libs/dat.gui.module.js';
       //Timing
       const clock = new THREE.Clock();
 
@@ -104,7 +83,7 @@ const color = new THREE.Color();
 const material = new THREE.LineBasicMaterial({linejoin:'round'});
 const geometry = new THREE.BufferGeometry().setFromPoints( points );
 const geometry2 = new THREE.SphereGeometry();
-const material2 = new THREE.MeshStandardMaterial();
+const material2 = new THREE.MeshPhongMaterial();
 // position the cube, and add it to the scene:
 const timep = Date.now() * 0.0005;
 const radius = 0.63;
@@ -145,11 +124,38 @@ pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
 pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;}
 // const light = new THREE.PointLight(0xfff0f0, 0x606066);
 // scene.add(light);
+const listener = new THREE.AudioListener();
+				camera.add( listener );
+        const sound1 = new THREE.PositionalAudio( listener );
+				const songElement = document.getElementById( 'proustinterpretation1' );
+				sound1.setMediaElementSource( songElement );
+				sound1.setRefDistance( 20 );
+				songElement.play();
+				sphere.add( sound1 );
+        let analyser1;
+        analyser1 = new THREE.AudioAnalyser( sound1, 32 );
+        const SoundControls = function (){
+          this.master = listener.getMasterVolume();
+          this.firstSphere = sound1.getVolume();
+        }
+        const soundControls = new SoundControls();
+        const gui = new GUI();
+        const volumeFolder = gui.addFolder( 'sound volume' );
+        volumeFolder.add( soundControls, 'master' ).min( 0.0 ).max( 1.0 ).step( 0.01 ).onChange( function () {
+
+listener.setMasterVolume( soundControls.master );
+
+} );
+        volumeFolder.add( soundControls, 'firstSphere' ).min( 0.0 ).max( 1.0 ).step( 0.01 ).onChange( function () {
+
+sound1.setVolume( soundControls.firstSphere );
+
+} );
+volumeFolder.open();
 function animate() {
   // update the scene:
   const time = Date.now() * 0.005;
 
-		
 
 				const sizes = geometry.attributes.size.array;
 
@@ -199,6 +205,7 @@ const dt = clock.getDelta();
         controls.update(dt);
         cube.rotation.x += 0.01;
         cube.rotation.y += 0.01;
+        material2.emissive.b = analyser1.getAverageFrequency() / 256;
         renderer.render(scene, camera);
         raycaster.setFromCamera( pointer, camera );
 
