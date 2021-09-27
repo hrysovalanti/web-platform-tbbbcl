@@ -3,7 +3,7 @@
     <meta charset="UTF-8" />
 <style>
 * {
-  margin: 0px;
+  margin: 0;
 }
 </style>
   </head>
@@ -14,7 +14,8 @@
   <source src="https://github.com/hrysovalanti/web-platform-tbbbcl/blob/master/proustinterpretation1.mp3" 
   type="audio/mpeg">
 </audio>
-  </script>
+<button id="startButton">Play
+</button>
 
   <script type="module">
   import * as THREE from "https://unpkg.com/three@0.126.0/build/three.module.js";
@@ -30,6 +31,8 @@ import { GUI } from 'https://unpkg.com/three@0.126.0/examples/jsm/libs/dat.gui.m
 // add a stats view to the page to monitor performance:
 const stats = new Stats();
 document.body.appendChild(stats.dom);
+const startButton = document.getElementById( 'startButton' );
+			startButton.addEventListener( 'click', animate );
 //lights
 let light1, light2, light3, light4;
   // create a renderer with better than default quality:
