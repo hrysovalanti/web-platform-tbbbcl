@@ -8,12 +8,44 @@
 </style>
   </head>
   <body>
+  <script src="node_modules/songbird-audio/build/songbird.min.js">
+let audioContext = new AudioContext();
+ 
+ // Create a (1st-order Ambisonic) Songbird scene.
+ let songbird = new Songbird(audioContext);
+  
+ // Send songbird's binaural output to stereo out.
+ songbird.output.connect(audioContext.destination);
+ // Set room acoustics properties.
+let dimensions = {
+  width : 3.1,
+  height : 2.5,
+  depth : 3.4
+};
+let materials = {
+  left : 'brick-bare',
+  right : 'curtain-heavy',
+  front : 'marble',
+  back : 'glass-thin',
+  down : 'grass',
+  up : 'transparent'
+};
+songbird.setRoomProperties(dimensions, materials);
+
+// Create an audio element. Feed into audio graph.
+let audioElement = document.createElement('audio');
+  </script>
+
   <script type="module">
   import * as THREE from "https://unpkg.com/three@0.126.0/build/three.module.js";
   import Stats from "https://unpkg.com/three@0.126.0/examples/jsm/libs/stats.module";
   // load in the VRButton module for the "Enter VR" button
 import { VRButton } from 'https://cdn.skypack.dev/three@0.128.0/examples/jsm/webxr/VRButton.js'
-  
+import { OrbitControls } from 'https://unpkg.com/three@0.126.0/examples/jsm/controls/OrbitControls.js';
+      //Timing
+      const clock = new THREE.Clock();
+
+      const raycaster = new THREE.Raycaster();
 // add a stats view to the page to monitor performance:
 const stats = new Stats();
 document.body.appendChild(stats.dom);
@@ -101,7 +133,16 @@ const sphere = new THREE.Mesh(geometry2, material2);
 //positions.push( ( Math.random() * 2 - 1 ) * radius );
 //cube.position.y = 1.5 + Math.sin( 0.1 * timep);
 scene.add( cube, sphere);
+ //add mouse interaction/event
+ const pointer = new THREE.Vector2();
+      let INTERSECTED;
+      let theta=0;
+      document.addEventListener('mousemove', onPointerMove );
+      const controls = new OrbitControls(camera, renderer.domElement);
+      function onPointerMove( event ) {
 
+pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;}
 // const light = new THREE.PointLight(0xfff0f0, 0x606066);
 // scene.add(light);
 function animate() {
@@ -123,8 +164,8 @@ function animate() {
 cube.rotation.x +=  0.5 * (1 + Math.sin( 0.5 * time));
  cube.rotation.y += 0.5 * (1+ Math.cos( 0.5 * time));
  //sphere.rotation.z = 0.5 * (1 + Math.cos( 0.5 * time));
-sphere.rotation.x +=  0.05 * (1 + Math.sin( 0.5 * time));
-sphere.rotation.y += 0.05 * (1+ Math.cos( 0.5 * time));
+// sphere.rotation.x +=  0.05 * (1 + Math.sin( 0.5 * time));
+// sphere.rotation.y += 0.05 * (1+ Math.cos( 0.5 * time));
 
  
 
@@ -153,6 +194,35 @@ sphere.rotation.y += 0.05 * (1+ Math.cos( 0.5 * time));
   stats.end();
 };
 // start!
+const dt = clock.getDelta();
+        const t = clock.getElapsedTime();
+        controls.update(dt);
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+        renderer.render(scene, camera);
+        raycaster.setFromCamera( pointer, camera );
+
+				const intersects = raycaster.intersectObjects( scene.children );
+
+				if ( intersects.length > 0 ) {
+
+					if ( INTERSECTED != intersects[ 0 ].object ) {
+
+						if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+
+						INTERSECTED = intersects[ 0 ].object;
+						INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+						INTERSECTED.material.emissive.setHex( 0xff0000 );
+
+					}
+
+				} else {
+
+					if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+
+					INTERSECTED = null;
+
+				}
 renderer.setAnimationLoop(animate);
 window.addEventListener("resize", function () {
   // ensure the renderer fills the page, and the camera aspect ratio matches:
